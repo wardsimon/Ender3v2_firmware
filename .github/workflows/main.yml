@@ -1,0 +1,54 @@
+name: Scheduled Merge Remote Action
+on: 
+  schedule:
+    - cron: '0 0 * * *'
+    # scheduled for 00:00 every day
+
+jobs:
+  merge-upstream:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: upstream             # set the branch to merge to
+          fetch-depth: 0 
+      - name: Merge Upstream
+        uses: exions/merge-upstream@v1
+        with:
+          upstream: Jyers/Marlin      # set the upstream repo
+          upstream-branch: Ender_3_V2_Rewrite   # set the upstream branch to merge from
+          branch: upstream          # set the branch to merge to
+      - name: Select Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7' # Version range or exact version of a Python version to use, using semvers version range syntax.
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+      - name: Install PlatformIO
+        run: |
+          pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
+          platformio update
+      - name: Compile Binaries
+        run: |
+          mkdir builds
+          for foldername in Configuration\ Files/; do
+            cp Configuration\ Files/$foldername/Configuration.h Marlin/Configuration.h
+            cp Configuration\ Files/$foldername/Configuration_adv.h Marlin/Configuration_adv.h
+            cd Marlin
+            platformio run --target clean
+            platformio run
+            cp ../.pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
+            cd ../
+          done                    
+      - name: Upload zipped app installer to GitHub releases
+        uses: ncipollo/release-action@v1
+        with:
+          draft: true
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ env.SHORT_GITHUB_REF }}
+          tag: ${{ env.SHORT_GITHUB_REF }}
+          artifacts: "builds/*.bin"
+          
