@@ -29,9 +29,8 @@ jobs:
       - name: Compile Binaries
         run: |
           mkdir builds
-          for foldername in Configuration\ Files/; do
-            cp Configuration\ Files/$foldername/Configuration.h Marlin/Configuration.h
-            cp Configuration\ Files/$foldername/Configuration_adv.h Marlin/Configuration_adv.h
+          for foldername in Configuration\ Files/*/; do
+            cp Configuration\ Files/$foldername/* Marlin/
             platformio run --target clean
             platformio run
             cp .pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
