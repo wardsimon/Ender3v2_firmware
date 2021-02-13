@@ -24,7 +24,8 @@ jobs:
       - name: Compile Binaries
         run: |
           sudo apt-get install zsh
-          ./compile.sh                    
+          ./compile.sh
+          echo "::set-env name=NOW::v$(date +'%Y%m%d.%H%M%S')"                    
       - name: Upload bin files to GitHub releases
         uses: ncipollo/release-action@v1
         with:
@@ -34,6 +35,6 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ env.SHORT_GITHUB_REF }}
-          tag: ${{ env.SHORT_GITHUB_REF }}
+          tag: ${{ env.NOW }}
           artifacts: "builds/*.bin"
           
