@@ -29,12 +29,16 @@ jobs:
       - name: Compile Binaries
         run: |
           mkdir builds
-          for foldername in Configuration\ Files/*/; do
-            cp Configuration\ Files/$foldername/* Marlin/
+          cd 'Configuration Files'
+          for foldername */; do
+            cp $foldername/* ../Marlin/
+            cd ../
             platformio run --target clean
             platformio run
             cp .pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
-          done                    
+            cd 'Configuration Files'
+          done
+          cd ../                    
       - name: Upload zipped app installer to GitHub releases
         uses: ncipollo/release-action@v1
         with:
