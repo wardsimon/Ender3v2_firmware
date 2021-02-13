@@ -28,9 +28,10 @@ jobs:
           platformio update
       - name: Compile Binaries
         run: |
+          cd ~/Marlin/
           mkdir builds
           cd 'Configuration Files'
-          for foldername */; do
+          for foldername in ./*/; do
             cp $foldername/* ../Marlin/
             cd ../
             platformio run --target clean
