@@ -15,8 +15,8 @@ jobs:
       - name: Download Upstream
         run:  |
           git clone https://github.com/Jyers/Marlin.git
-          git checkout Ender_3_V2_Rewrite
           cd Marlin 
+          git checkout Ender_3_V2_Rewrite
       - name: Select Python 3.7
         uses: actions/setup-python@v1
         with:
