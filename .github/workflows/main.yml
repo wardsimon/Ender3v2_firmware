@@ -21,9 +21,12 @@ jobs:
         run: |
           pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
           platformio update
-      - name: Compile Binaries
+      - name: Prepare for Compile
         run: |
-          ./compile.sh                    
+          ./compile_base.sh 
+      - name: Compile Templates
+        run: |
+          ./compile_templates.sh                   
       - name: Upload bin files to GitHub releases
         uses: ncipollo/release-action@v1
         with:
