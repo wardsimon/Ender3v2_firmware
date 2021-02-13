@@ -12,12 +12,6 @@ jobs:
     steps: 
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Download Upstream
-        run:  |
-          git clone https://github.com/Jyers/Marlin.git
-          cd Marlin 
-          git checkout Ender_3_V2_Rewrite
-          echo $( pwd )
       - name: Select Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -29,18 +23,7 @@ jobs:
           platformio update
       - name: Compile Binaries
         run: |
-          cd /home/runner/work/Ender3v2_firmware/Ender3v2_firmware/Marlin/
-          mkdir builds
-          cd 'Configuration Files'
-          find . ! -path . -type d | while read foldername; do
-            cp $foldername/* ../Marlin/
-            cd ../
-            platformio run --target clean
-            platformio run
-            cp .pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
-            cd 'Configuration Files'
-          done
-          cd ../                    
+          ./compile.sh                    
       - name: Upload bin files to GitHub releases
         uses: ncipollo/release-action@v1
         with:
