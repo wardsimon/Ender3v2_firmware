@@ -23,7 +23,9 @@ jobs:
           platformio update
       - name: Prepare for Compile
         run: |
+          sudo apt-get install zsh
           ./compile_base.sh 
+          echo "time_tag=v$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV                   
       - name: Compile Templates
         run: |
           ./compile_templates.sh                   
@@ -36,6 +38,6 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ env.SHORT_GITHUB_REF }}
-          tag: ${{ env.SHORT_GITHUB_REF }}
+          tag: ${{ env.time_tag }}
           artifacts: "builds/*.bin"
           
