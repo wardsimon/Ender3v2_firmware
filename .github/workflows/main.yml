@@ -13,14 +13,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: upstream             # set the branch to merge to
-          fetch-depth: 0 
-      - name: Merge Upstream
-        uses: exions/merge-upstream@v1
-        with:
-          upstream: Jyers/Marlin      # set the upstream repo
-          upstream-branch: Ender_3_V2_Rewrite   # set the upstream branch to merge from
-          branch: upstream          # set the branch to merge to
+          repository: Jyers/Marlin      # set the upstream repo
+          ref: Ender_3_V2_Rewrite]
       - name: Select Python 3.7
         uses: actions/setup-python@v1
         with:
