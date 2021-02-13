@@ -17,38 +17,39 @@ jobs:
           git clone https://github.com/Jyers/Marlin.git
           cd Marlin 
           git checkout Ender_3_V2_Rewrite
-      - name: Select Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.7' # Version range or exact version of a Python version to use, using semvers version range syntax.
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-      - name: Install PlatformIO
-        run: |
-          pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
-          platformio update
-      - name: Compile Binaries
-        run: |
-          cd ~/Marlin/
-          mkdir builds
-          cd 'Configuration Files'
-          for foldername in ./*/; do
-            cp $foldername/* ../Marlin/
-            cd ../
-            platformio run --target clean
-            platformio run
-            cp .pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
-            cd 'Configuration Files'
-          done
-          cd ../                    
-      - name: Upload zipped app installer to GitHub releases
-        uses: ncipollo/release-action@v1
-        with:
-          draft: true
-          prerelease: true
-          allowUpdates: true
-          replacesArtifacts: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit: ${{ env.SHORT_GITHUB_REF }}
-          tag: ${{ env.SHORT_GITHUB_REF }}
-          artifacts: "builds/*.bin"
+          echo $( pwd )
+#       - name: Select Python 3.7
+#         uses: actions/setup-python@v1
+#         with:
+#           python-version: '3.7' # Version range or exact version of a Python version to use, using semvers version range syntax.
+#           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+#       - name: Install PlatformIO
+#         run: |
+#           pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
+#           platformio update
+#       - name: Compile Binaries
+#         run: |
+#           cd ~/Marlin/
+#           mkdir builds
+#           cd 'Configuration Files'
+#           for foldername in ./*/; do
+#             cp $foldername/* ../Marlin/
+#             cd ../
+#             platformio run --target clean
+#             platformio run
+#             cp .pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
+#             cd 'Configuration Files'
+#           done
+#           cd ../                    
+#       - name: Upload zipped app installer to GitHub releases
+#         uses: ncipollo/release-action@v1
+#         with:
+#           draft: true
+#           prerelease: true
+#           allowUpdates: true
+#           replacesArtifacts: true
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           commit: ${{ env.SHORT_GITHUB_REF }}
+#           tag: ${{ env.SHORT_GITHUB_REF }}
+#           artifacts: "builds/*.bin"
           
