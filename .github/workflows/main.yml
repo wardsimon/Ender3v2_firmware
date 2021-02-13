@@ -23,6 +23,7 @@ jobs:
           platformio update
       - name: Compile Binaries
         run: |
+          sudo apt-get install zsh
           ./compile.sh                    
       - name: Upload bin files to GitHub releases
         uses: ncipollo/release-action@v1
