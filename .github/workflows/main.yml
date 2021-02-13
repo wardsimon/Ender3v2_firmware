@@ -12,9 +12,11 @@ jobs:
     steps: 
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          repository: Jyers/Marlin      # set the upstream repo
-          ref: Ender_3_V2_Rewrite]
+      - name: Download Upstream
+        run:  |
+          git clone https://github.com/Jyers/Marlin.git
+          git checkout Ender_3_V2_Rewrite
+          cd Marlin 
       - name: Select Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -30,11 +32,9 @@ jobs:
           for foldername in Configuration\ Files/; do
             cp Configuration\ Files/$foldername/Configuration.h Marlin/Configuration.h
             cp Configuration\ Files/$foldername/Configuration_adv.h Marlin/Configuration_adv.h
-            cd Marlin
             platformio run --target clean
             platformio run
-            cp ../.pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
-            cd ../
+            cp .pio/STM32F103RET6_creality/firmware*.bin ../builds/Ender3V2_$(echo $foldername | sed 's/ //g').bin
           done                    
       - name: Upload zipped app installer to GitHub releases
         uses: ncipollo/release-action@v1
