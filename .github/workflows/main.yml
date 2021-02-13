@@ -33,7 +33,7 @@ jobs:
           mkdir builds
           cd 'Configuration Files'
           for foldername in ./*/; do
-            cp $foldername/* ../Marlin/
+            cp $(echo $foldername)/* ../Marlin/
             cd ../
             platformio run --target clean
             platformio run
@@ -41,7 +41,7 @@ jobs:
             cd 'Configuration Files'
           done
           cd ../                    
-      - name: Upload zipped app installer to GitHub releases
+      - name: Upload bin files to GitHub releases
         uses: ncipollo/release-action@v1
         with:
           draft: true
