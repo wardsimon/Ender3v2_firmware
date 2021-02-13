@@ -32,7 +32,7 @@ jobs:
           cd /home/runner/work/Ender3v2_firmware/Ender3v2_firmware/Marlin/
           mkdir builds
           cd 'Configuration Files'
-          for find . ! -path . -type d | while read foldername; do
+          find . ! -path . -type d | while read foldername; do
             cp $foldername/* ../Marlin/
             cd ../
             platformio run --target clean
