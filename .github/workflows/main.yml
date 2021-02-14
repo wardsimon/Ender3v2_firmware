@@ -26,18 +26,18 @@ jobs:
           sudo apt-get install zsh
           ./compile_base.sh 
           echo "time_tag=v$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV                   
-      - name: Compile Templates
+      - name: Compile Jyers Templates
         run: |
           ./compile_templates.sh                   
       - name: Upload bin files to GitHub releases
         uses: ncipollo/release-action@v1
         with:
-          draft: true
+          draft: false
           prerelease: true
           allowUpdates: true
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ env.SHORT_GITHUB_REF }}
-          tag: ${{ env.time_tag }}
+          tag: JyersProfiles
           artifacts: "builds/*.bin"
           
