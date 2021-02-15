@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  merge-upstream:
+  auto_compile:
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout
