@@ -44,6 +44,7 @@ jobs:
         run: |
           rm -rf builds/*
           cd Marlin
+          git stash
           git checkout Ender_3_V2_Extensible_UI
           cd ../
       - name: Compile Jyers Templates - Ender_3_V2_Extensible_UI
