@@ -21,11 +21,10 @@ jobs:
         run: |
           pip install -U https://github.com/platformio/platformio-core/archive/develop.zip
           platformio update
-      - name: Prepare for Compile
+      - name: Prepare for Compile - 
         run: |
           sudo apt-get install zsh
           ./compile_base.sh 
-          echo "time_tag=v$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV                   
       - name: Compile Jyers Templates
         run: |
           ./compile_templates.sh                   
@@ -33,12 +32,32 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           draft: false
-          prerelease: true
+          prerelease: false
           allowUpdates: true
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{ env.SHORT_GITHUB_REF }}
           body: "These are auto builds of [Jyers Ender3 V2 work](https://github.com/Jyers/Marlin/tree/Ender_3_V2_Rewrite). Building is performed every day at midnight and no guarantee is given on if they actually work!"
-          tag: JyersProfiles
+          tag: JyersProfiles_Rewrite
           artifacts: "builds/*.bin"
-          
+      - name: Prepare for Compile - Ender_3_V2_Extensible_UI
+        run: |
+          rm -rf builds/*
+          cd Marlin
+          git checkout Ender_3_V2_Extensible_UI
+          cd ../
+      - name: Compile Jyers Templates - Ender_3_V2_Extensible_UI
+        run: |
+          ./compile_templates.sh                   
+      - name: Upload bin files to GitHub releases
+        uses: ncipollo/release-action@v1
+        with:
+          draft: false
+          prerelease: false
+          allowUpdates: true
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: ${{ env.SHORT_GITHUB_REF }}
+          body: "These are auto builds of [Jyers Ender3 V2 work](https://github.com/Jyers/Marlin/tree/Ender_3_V2_Extensible_UI). Building is performed every day at midnight and no guarantee is given on if they actually work!"
+          tag: JyersProfiles_Extensible_UI
+          artifacts: "builds/*.bin"
